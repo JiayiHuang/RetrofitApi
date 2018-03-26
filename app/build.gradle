@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.hjy.retrofitapi"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+    }
+    signingConfigs {
+        release {
+            keyAlias 'hjy'
+            keyPassword 'hjy666'
+            storeFile file('./key/HJY_Keystore_hjy666.jks')
+            storePassword 'hjy666'
+        }
+        debug {
+            keyAlias 'hjy'
+            keyPassword 'hjy666'
+            storeFile file('./key/HJY_Keystore_hjy666.jks')
+            storePassword 'hjy666'
+        }
+    }
+    buildTypes {
+        release {
+            /***********************配置文件区分不同环境**********************/
+            //用户系统的正式域名
+            buildConfigField("String", "API_URL", "\"http://tjapp.v1.cn\"")
+            signingConfig signingConfigs.release
+            shrinkResources true
+            minifyEnabled true
+            zipAlignEnabled true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debugWithReleaseKey {
+            buildConfigField("String", "API_URL", "\"http://192.168.9.65:88\"")
+            signingConfig signingConfigs.release
+//            shrinkResources true
+            minifyEnabled false
+            zipAlignEnabled true
+            debuggable true
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    // retrofit + okhttp + gson
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.7.0'
+    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+}
